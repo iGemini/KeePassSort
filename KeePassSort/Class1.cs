@@ -36,7 +36,7 @@ namespace KeePassSort
                 return;
             }
 
-            var comparer = new PwEntryComparer("Title", false, true);
+            var comparer = new PwEntryComparer("Title", true, true);
             var root = _host.Database.RootGroup;
 
             root.Entries.Sort(comparer);
