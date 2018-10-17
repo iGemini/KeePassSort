@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using KeePass.Plugins;
 using KeePassLib;
@@ -46,24 +48,15 @@ namespace KeePassSort
 
         private void AZClicked(object sender, EventArgs e)
         {
-            if (!_host.Database.IsOpen)
-            {
-                MessageBox.Show("You first need to open a database.", "KeePass Sort");
-                return;
-            }
-
-            var comparer = new PwEntryComparer("Title", true, true);
-            var root = _host.Database.RootGroup;
-
-            root.Entries.Sort(comparer);
-
-            foreach (var group in root.Groups) group.Entries.Sort(comparer);
-
-            _host.Database.Modified = true;
-            _host.MainWindow.RefreshEntriesList();
+            SortEntries(false);
         }
 
         private void ZAClicked(object sender, EventArgs e)
+        {
+            SortEntries(true);
+        }
+
+        private void SortEntries(bool reverse)
         {
             if (!_host.Database.IsOpen)
             {
@@ -71,7 +64,8 @@ namespace KeePassSort
                 return;
             }
 
-            var comparer = new CompareZA("Title", true, true);
+            var comparer = reverse ? (IComparer<PwEntry>) new CompareZA("Title", true, true) : new PwEntryComparer("Title", true, true);
+
             var root = _host.Database.RootGroup;
 
             root.Entries.Sort(comparer);
