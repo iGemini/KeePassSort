@@ -11,7 +11,6 @@ namespace KeePassSort
     public class KeePassSortExt : Plugin
     {
         private IPluginHost _host;
-        //private ToolStripMenuItem _tsmiCase;
         private ToolStripMenuItem _tsmiMenuItem;
         private ToolStripSeparator _tsSeparator;
 
@@ -29,17 +28,9 @@ namespace KeePassSort
             var _tsmiAZ = new ToolStripMenuItem("A -> Z", null, AZClicked);
             var _tsmiZA = new ToolStripMenuItem("Z -> A", null, ZAClicked);
 
-            /*
-            var _tsmiCase = new ToolStripMenuItem("Case Sensitive?")
-            {
-                CheckOnClick = true
-            };
-            */
-
             _tsmiMenuItem.DropDownItems.Add(_tsmiAZ);
             _tsmiMenuItem.DropDownItems.Add(_tsmiZA);
             _tsmiMenuItem.DropDownItems.Add(_tsSeparator);
-            //_tsmiMenuItem.DropDownItems.Add(_tsmiCase);
 
             tsMenu.Add(_tsmiMenuItem);
 
