@@ -5,27 +5,27 @@ using KeePassLib.Utility;
 
 namespace KeePassSort.Utility
 {
-    internal class CompareZA : IComparer<PwEntry>
+    internal class CompareDescending : IComparer<PwEntry>
     {
-        private readonly bool m_bCaseInsensitive;
-        private readonly bool m_bCompareNaturally;
-        private readonly string m_strFieldName;
+        private readonly bool _caseInsensitive;
+        private readonly bool _compareNaturally;
+        private readonly string _fieldName;
 
-        public CompareZA(string strFieldName, bool bCaseInsensitive, bool bCompareNaturally)
+        public CompareDescending(string fieldName, bool caseInsensitive, bool compareNaturally)
         {
-            m_strFieldName = strFieldName ?? throw new ArgumentNullException(nameof(strFieldName));
-            m_bCaseInsensitive = bCaseInsensitive;
-            m_bCompareNaturally = bCompareNaturally;
+            _fieldName = fieldName ?? throw new ArgumentNullException(nameof(fieldName));
+            _caseInsensitive = caseInsensitive;
+            _compareNaturally = compareNaturally;
         }
 
 
         public int Compare(PwEntry x, PwEntry y)
         {
-            var str1 = x.Strings.ReadSafe(m_strFieldName);
-            var str2 = y.Strings.ReadSafe(m_strFieldName);
-            return m_bCompareNaturally
+            var str1 = x.Strings.ReadSafe(_fieldName);
+            var str2 = y.Strings.ReadSafe(_fieldName);
+            return _compareNaturally
                 ? StrUtil.CompareNaturally(str2, str1)
-                : string.Compare(str2, str1, m_bCaseInsensitive);
+                : string.Compare(str2, str1, _caseInsensitive);
         }
     }
 }
