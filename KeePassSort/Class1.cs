@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using KeePass.Plugins;
@@ -11,8 +10,8 @@ namespace KeePassSort
     public class KeePassSortExt : Plugin
     {
         private IPluginHost _host;
-        private ToolStripMenuItem _tsmiMenuItem;
-        private ToolStripSeparator _tsSeparator;
+        private ToolStripMenuItem _pluginMenuItem;
+        private ToolStripSeparator _separator;
 
         // Set up menu items etc
         public override bool Initialize(IPluginHost host)
@@ -21,33 +20,33 @@ namespace KeePassSort
 
             var tsMenu = host.MainWindow.ToolsMenu.DropDownItems;
 
-            _tsSeparator = new ToolStripSeparator();
-            tsMenu.Add(_tsSeparator);
+            _separator = new ToolStripSeparator();
+            tsMenu.Add(_separator);
 
-            _tsmiMenuItem = new ToolStripMenuItem {Text = "KeePass Sorter"};
-            var _tsmiAZ = new ToolStripMenuItem("A -> Z", null, AZClicked);
-            var _tsmiZA = new ToolStripMenuItem("Z -> A", null, ZAClicked);
+            _pluginMenuItem = new ToolStripMenuItem {Text = "KeePass Sorter"};
+            var menuItemAscending = new ToolStripMenuItem("A -> Z", null, AscendingClicked);
+            var menuItemDescending = new ToolStripMenuItem("Z -> A", null, DescendingClicked);
 
-            _tsmiMenuItem.DropDownItems.Add(_tsmiAZ);
-            _tsmiMenuItem.DropDownItems.Add(_tsmiZA);
-            _tsmiMenuItem.DropDownItems.Add(_tsSeparator);
+            _pluginMenuItem.DropDownItems.Add(menuItemAscending);
+            _pluginMenuItem.DropDownItems.Add(menuItemDescending);
+            _pluginMenuItem.DropDownItems.Add(_separator);
 
-            tsMenu.Add(_tsmiMenuItem);
+            tsMenu.Add(_pluginMenuItem);
 
             return true;
         }
 
-        private void AZClicked(object sender, EventArgs e)
+        private void AscendingClicked(object sender, EventArgs e)
         {
             SortEntries(false);
         }
 
-        private void ZAClicked(object sender, EventArgs e)
+        private void DescendingClicked(object sender, EventArgs e)
         {
             SortEntries(true);
         }
 
-        private void SortEntries(bool reverse)
+        private void SortEntries(bool descending)
         {
             if (!_host.Database.IsOpen)
             {
@@ -55,7 +54,9 @@ namespace KeePassSort
                 return;
             }
 
-            var comparer = reverse ? (IComparer<PwEntry>) new CompareZA("Title", true, true) : new PwEntryComparer("Title", true, true);
+            var comparer = descending
+                ? (IComparer<PwEntry>) new CompareDescending("Title", true, true)
+                : new PwEntryComparer("Title", true, true);
 
             var root = _host.Database.RootGroup;
 
@@ -71,8 +72,8 @@ namespace KeePassSort
         public override void Terminate()
         {
             var tsMenu = _host.MainWindow.ToolsMenu.DropDownItems;
-            tsMenu.Remove(_tsmiMenuItem);
-            tsMenu.Remove(_tsSeparator);
+            tsMenu.Remove(_pluginMenuItem);
+            tsMenu.Remove(_separator);
         }
     }
 }
