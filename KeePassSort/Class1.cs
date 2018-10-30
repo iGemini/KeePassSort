@@ -65,7 +65,6 @@ namespace KeePassSort
             foreach (var group in root.Groups) group.Entries.Sort(comparer);
 
             _host.Database.Modified = true;
-            _host.MainWindow.RefreshEntriesList();
         }
 
         // Handle cleanup here
