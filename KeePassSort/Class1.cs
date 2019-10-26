@@ -13,6 +13,16 @@ namespace KeePassSort
         private ToolStripMenuItem _pluginMenuItem;
         private ToolStripSeparator _separator;
 
+        private void AscendingClicked(object sender, EventArgs e)
+        {
+            SortEntries(false);
+        }
+
+        private void DescendingClicked(object sender, EventArgs e)
+        {
+            SortEntries(true);
+        }
+
         // Set up menu items etc
         public override bool Initialize(IPluginHost host)
         {
@@ -36,16 +46,6 @@ namespace KeePassSort
             return true;
         }
 
-        private void AscendingClicked(object sender, EventArgs e)
-        {
-            SortEntries(false);
-        }
-
-        private void DescendingClicked(object sender, EventArgs e)
-        {
-            SortEntries(true);
-        }
-
         private void SortEntries(bool descending)
         {
             if (!_host.Database.IsOpen)
@@ -60,11 +60,20 @@ namespace KeePassSort
 
             var root = _host.Database.RootGroup;
 
-            root.Entries.Sort(comparer);
+            SortGroups(comparer, root);
+            
+            // root.Entries.Sort(comparer);
 
-            foreach (var group in root.Groups) group.Entries.Sort(comparer);
+            // foreach (var group in root.Groups) SortGroups(comparer, group);
 
             _host.Database.Modified = true;
+        }
+
+        private void SortGroups(IComparer<PwEntry> comparer, PwGroup group)
+        {
+            group.Entries.Sort(comparer);
+
+            foreach (var g in group.Groups) SortGroups(comparer, g);
         }
 
         // Handle cleanup here
