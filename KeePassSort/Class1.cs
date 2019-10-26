@@ -61,8 +61,9 @@ namespace KeePassSort
             var root = _host.Database.RootGroup;
 
             SortGroups(comparer, root);
-            
+
             _host.Database.Modified = true;
+            _host.Database.Save(null);
         }
 
         private void SortGroups(IComparer<PwEntry> comparer, PwGroup group)
