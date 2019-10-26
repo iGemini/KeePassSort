@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using KeePass.Plugins;
-using KeePass.UI;
 using KeePassLib;
-using KeePassLib.Interfaces;
 using KeePassSort.Utility;
 
 namespace KeePassSort
