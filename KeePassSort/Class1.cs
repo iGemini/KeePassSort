@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using KeePass.Plugins;
+using KeePass.UI;
 using KeePassLib;
+using KeePassLib.Interfaces;
 using KeePassSort.Utility;
 
 namespace KeePassSort
@@ -61,8 +63,9 @@ namespace KeePassSort
             var root = _host.Database.RootGroup;
 
             SortGroups(comparer, root);
-            
+
             _host.Database.Modified = true;
+            _host.Database.Save(null);
         }
 
         private void SortGroups(IComparer<PwEntry> comparer, PwGroup group)
