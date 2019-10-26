@@ -62,10 +62,6 @@ namespace KeePassSort
 
             SortGroups(comparer, root);
             
-            // root.Entries.Sort(comparer);
-
-            // foreach (var group in root.Groups) SortGroups(comparer, group);
-
             _host.Database.Modified = true;
         }
 
