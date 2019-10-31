@@ -10,8 +10,6 @@ namespace KeePassSort
     public class KeePassSortExt : Plugin
     {
         private IPluginHost _host;
-        private ToolStripMenuItem _pluginMenuItem;
-        private ToolStripSeparator _separator;
 
         private void AscendingClicked(object sender, EventArgs e)
         {
@@ -23,26 +21,29 @@ namespace KeePassSort
             SortEntries(true);
         }
 
+        public override ToolStripMenuItem GetMenuItem(PluginMenuType t)
+        {
+            if (t != PluginMenuType.Main) return null;
+
+            var tsmi = new ToolStripMenuItem {Text = "KeePass Sorter"};
+
+            var menuItemAscending = new ToolStripMenuItem {Text = "A -> Z"};
+            menuItemAscending.Click += AscendingClicked;
+
+            var menuItemDescending = new ToolStripMenuItem {Text = "Z -> A"};
+            menuItemDescending.Click += DescendingClicked;
+
+            tsmi.DropDownItems.Add(menuItemAscending);
+            tsmi.DropDownItems.Add(menuItemDescending);
+            tsmi.DropDownItems.Add(new ToolStripSeparator());
+
+            return tsmi;
+        }
+
         // Set up menu items etc
         public override bool Initialize(IPluginHost host)
         {
             _host = host;
-
-            var tsMenu = host.MainWindow.ToolsMenu.DropDownItems;
-
-            _separator = new ToolStripSeparator();
-            tsMenu.Add(_separator);
-
-            _pluginMenuItem = new ToolStripMenuItem {Text = "KeePass Sorter"};
-            var menuItemAscending = new ToolStripMenuItem("A -> Z", null, AscendingClicked);
-            var menuItemDescending = new ToolStripMenuItem("Z -> A", null, DescendingClicked);
-
-            _pluginMenuItem.DropDownItems.Add(menuItemAscending);
-            _pluginMenuItem.DropDownItems.Add(menuItemDescending);
-            _pluginMenuItem.DropDownItems.Add(_separator);
-
-            tsMenu.Add(_pluginMenuItem);
-
             return true;
         }
 
@@ -76,9 +77,6 @@ namespace KeePassSort
         // Handle cleanup here
         public override void Terminate()
         {
-            var tsMenu = _host.MainWindow.ToolsMenu.DropDownItems;
-            tsMenu.Remove(_pluginMenuItem);
-            tsMenu.Remove(_separator);
         }
     }
 }
