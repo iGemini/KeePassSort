@@ -98,8 +98,9 @@ namespace KeePassSort
                 group.Entries.Sort(comparer);
             }
 
-            _host.Database.Modified = true;
+            _host.MainWindow.UpdateUI(false, null, false, _host.MainWindow.GetSelectedGroup(), true, null, false);
             _host.Database.Save(null);
+            
         }
 
         private void SortGroupsRecursively(IComparer<PwEntry> comparer, PwGroup group)
