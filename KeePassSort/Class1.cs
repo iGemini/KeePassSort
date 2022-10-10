@@ -83,7 +83,7 @@ namespace KeePassSort
 
             var comparer = descending
                 ? (IComparer<PwEntry>) new CompareDescending("Title", true, true)
-                : new PwEntryComparer("Title", true, true);
+                : new CompareAscending("Title", true, true);
 
             if (_sortRecursively == true)
             {
