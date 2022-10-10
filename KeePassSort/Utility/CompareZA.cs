@@ -23,6 +23,13 @@ namespace KeePassSort.Utility
         {
             var str1 = x.Strings.ReadSafe(_fieldName);
             var str2 = y.Strings.ReadSafe(_fieldName);
+
+
+            if (str1 == str2) { 
+                str1 = x.Strings.ReadSafe("UserName");
+                str2 = y.Strings.ReadSafe("UserName");
+            }
+
             return _compareNaturally
                 ? StrUtil.CompareNaturally(str2, str1)
                 : string.Compare(str2, str1, _caseInsensitive);
